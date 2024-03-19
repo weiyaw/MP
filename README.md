@@ -7,15 +7,17 @@ We provide the run scripts for obtaining the numerical results and plots in the 
 ## Installation
 The `pr_copula` package can be installed by runnning the following in the main folder:
 ```
-python3 setup.py install
+pip3 install ./   
 ```
 or the following if you'd like to make edits to the package:
 ```
-python3 setup.py develop
+ pip3 install -e ./
 ```
 We recommend doing so in a clean virtual environment if reproducing the experimental results is of interest.
 
-Please check the [JAX](https://github.com/google/jax) page for instructions on installing JAX for CPU versus GPU usage - both should work with `pr_copula` for general use. Note that for the numerical values and plots in the paper, the CPU version was used for reproducibility due to the non-determinism of GPU calculations, and timing was carried out on the GPU version. For full reproducibility of the experiments in the paper, please use the versions installed by `setup.py`, that is `jax==0.2.6` and `jaxlib==0.1.57`. 
+Please check the [JAX](https://github.com/google/jax) page for instructions on installing JAX for CPU versus GPU usage - both should work with `pr_copula` for general use. Note that for the numerical values and plots in the paper, the CPU version was used for reproducibility due to the non-determinism of GPU calculations, and timing was carried out on the GPU version. For full reproducibility of the experiments in the paper, please use the versions installed by `setup.py`, that is `jax==0.4.25` and `jaxlib==0.4.25`. 
+
+**UPDATE (19/03/2024)**: Due to updating of the packages used for optimization since the publication, some of the chosen hyperparameters may be slightly different to the original paper. Please contact me if there are any significant deviations.
 
 The suggested version of R is ≥4.0 for the MCMC examples. Please install the `dirichletprocess` package [here](https://cran.r-project.org/web/packages/dirichletprocess/index.html).
 
