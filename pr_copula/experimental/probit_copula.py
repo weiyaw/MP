@@ -47,7 +47,7 @@ def norm_copula_logdistribution_logdensity(u,v,rho):
     return logcop_dist,logcop_dens
 
 ##Probit##
-Approximations for computing bivariate copula distribution
+#Approximations for computing bivariate copula distribution
 @jit
 def log_g_cop(u,rho):
     eps = 1e-6

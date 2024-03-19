@@ -5,7 +5,6 @@ from jax.scipy.special import ndtri,erfc,logsumexp
 from jax.scipy.stats import norm
 from jax import random
 from jax.lax import fori_loop,scan
-from jax.ops import index, index_add, index_update
 import scipy as osp
 from functools import partial
 from scipy.optimize import minimize,root
@@ -92,11 +91,11 @@ def update_pn(carry,i):
  
     #add p1 or (1-p1) depending on what y_new is
     temp = y_new*logpmf1_yn[i,-1] +(1-y_new)*jnp.log1p(jnp.clip(-jnp.exp(logpmf1_yn[i,-1]),-1+eps,jnp.inf))
-    preq_loglik = index_update(preq_loglik,i,temp)
+    preq_loglik = preq_loglik.at[i].set(temp)
 
     #
     log_v = logpmf1_yn[i]
-    log_vn = index_update(log_vn,i,log_v)
+    log_vn = log_vn.at[i].set(log_v)
 
     logpmf1_yn= update_copula(logpmf1_yn,log_v,y_new,logalpha_x,rho)
     carry = log_vn,logpmf1_yn,preq_loglik,y,x,rho,rho_x

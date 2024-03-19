@@ -1,6 +1,6 @@
 ###JAX implementation of BFGS with armijo back-tracking line search
 import jax.numpy as jnp
-from jax.experimental.optimizers import optimizer
+from jax.example_libraries.optimizers import optimizer
 from jax.lax import while_loop,cond
 from jax import grad,value_and_grad, jit
 from functools import partial

@@ -56,7 +56,7 @@ def fit_copula_classification(y,x,n_perm = 10, seed = 20,n_perm_optim = None,sin
     start = time.time()
     # Condit preq loglik
     opt = minimize(fun = mvcc.fun_ccll_perm_sp, x0= hyperparam_init,\
-        args = (y_perm_opt,x_perm_opt),jac = mvcc.grad_ccll_perm_sp,method = 'SLSQP',options={'maxiter':100, 'ftol': 1e-4})
+        args = (y_perm_opt,x_perm_opt),jac = mvcc.grad_ccll_perm_sp,method = 'L-BFGS-B',options={'maxiter':100, 'ftol': 1e-4})
 
     #check optimization succeeded
     if opt.success == False:

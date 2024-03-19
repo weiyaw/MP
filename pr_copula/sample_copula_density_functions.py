@@ -7,7 +7,6 @@ import jax.numpy as jnp
 from jax import grad,value_and_grad, jit, vmap,jacfwd,jacrev,random
 from jax.scipy.stats import norm
 from jax.lax import fori_loop
-from jax.ops import index_update
 
 #import package functions
 from . import copula_density_functions as mvcd
@@ -59,8 +58,8 @@ def pr_1step_conv(i,inputs):  #t = n+i
     logcdf_conditionals_new,logpdf_joints_new= mvcd.update_copula(logcdf_conditionals,logpdf_joints,u,v,logalpha,rho)
 
     #joint density
-    pdiff = index_update(pdiff,i,jnp.mean(jnp.abs(jnp.exp(logpdf_joints_new[:,-1])- jnp.exp(logpdf_joints_init[:,-1])))) #mean density diff from initial
-    cdiff = index_update(cdiff,i,jnp.mean(jnp.abs(jnp.exp(logcdf_conditionals_new[:,0])- jnp.exp(logcdf_conditionals_init[:,0])))) #mean cdf diff from initial (only univariate)
+    pdiff = pdiff.at[i].set(jnp.mean(jnp.abs(jnp.exp(logpdf_joints_new[:,-1])- jnp.exp(logpdf_joints_init[:,-1])))) #mean density diff from initial
+    cdiff = cdiff.at[i].set(jnp.mean(jnp.abs(jnp.exp(logcdf_conditionals_new[:,0])- jnp.exp(logcdf_conditionals_init[:,0])))) #mean cdf diff from initial (only univariate)
 
     outputs = logcdf_conditionals_new,logpdf_joints_new,logcdf_conditionals_init,logpdf_joints_init,pdiff,cdiff,rho,n,a_rand 
     return outputs

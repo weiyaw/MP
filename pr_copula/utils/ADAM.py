@@ -1,6 +1,6 @@
 ###JAX implementation of ADAM
 import jax.numpy as jnp
-from jax.experimental.optimizers import adam
+from jax.example_libraries.optimizers import adam
 from jax.lax import while_loop,cond
 from jax import grad,value_and_grad, jit
 from functools import partial

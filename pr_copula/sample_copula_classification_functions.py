@@ -5,7 +5,6 @@ from jax.scipy.special import ndtri,erfc,logsumexp
 from jax.scipy.stats import norm
 from jax import random
 from jax.lax import fori_loop,scan
-from jax.ops import index, index_add, index_update
 import scipy as osp
 from functools import partial
 from scipy.optimize import minimize,root
@@ -30,7 +29,7 @@ def update_pn_forward(carry,i):
     #Sample new y based on unif rv
     y_new = jnp.where((jnp.log(vT[i])<= logpmf_yn[ind_new[i]]),x = 1,y =0)
     log_vn = logpmf_yn[ind_new[i]]
-    y_samp = index_update(y_samp,index[i],y_new)
+    y_samp = y_samp.at[i].set(y_new)
     
     #Update pmf_yn
     #compute x rhos/alphas
@@ -46,7 +45,7 @@ def update_pn_forward(carry,i):
     logpmf_yn= mvcc.update_copula(logpmf_yn,log_vn,y_new,logalpha_x,rho)
 
     #Compute pdiff
-    pdiff = index_update(pdiff,index[i,:],jnp.abs(jnp.exp(logpmf_yn[:,0]) - jnp.exp(logpmf_init[:,0])))
+    pdiff = pdiff.at[i,:].set(jnp.abs(jnp.exp(logpmf_yn[:,0]) - jnp.exp(logpmf_init[:,0])))
 
     #Update pmf_ytest
     #compute x rhos/alphas

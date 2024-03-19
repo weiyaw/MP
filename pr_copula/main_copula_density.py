@@ -53,7 +53,7 @@ def fit_copula_density(y,n_perm = 10, seed = 20,n_perm_optim = None, single_band
     print('Optimizing...')
     start = time.time()
     opt = minimize(fun = mvcd.fun_jll_perm_sp, x0= hyperparam_init,\
-                     args = (y_perm_opt),jac =mvcd.grad_jll_perm_sp,method = 'SLSQP')
+                     args = (y_perm_opt),jac =mvcd.grad_jll_perm_sp,method = 'L-BFGS-B')
 
     #check optimization succeeded
     if opt.success == False:

@@ -63,7 +63,7 @@ def fit_copula_jregression(y,x,n_perm = 10, seed = 20,n_perm_optim = None, singl
     start = time.time()
     # Condit preq loglik
     opt = minimize(fun = mvcr.fun_jcll_perm_sp, x0= hyperparam_init,\
-                     args = (z_perm_opt),jac =mvcr.grad_jcll_perm_sp,method = 'SLSQP') 
+                     args = (z_perm_opt),jac =mvcr.grad_jcll_perm_sp,method = 'L-BFGS-B') 
 
     #check optimization succeeded
     if opt.success == False:

@@ -5,7 +5,6 @@ from jax.scipy.special import ndtri,erfc,logsumexp
 from jax.scipy.stats import norm
 from jax import random
 from jax.lax import fori_loop,scan
-from jax.ops import index, index_add, index_update
 import scipy as osp
 from functools import partial
 from scipy.optimize import minimize,root
@@ -38,8 +37,8 @@ def pr_1step_conv_jregression(i,inputs):  #t = n+i
     logcdf_conditionals_new,logpdf_joints_new= mvcd.update_copula(logcdf_conditionals,logpdf_joints,u,v,logalpha,rho)
 
     #conditional density
-    pdiff = index_update(pdiff,i,jnp.mean(jnp.abs(jnp.exp(logpdf_joints_new[:,-1] - logpdf_joints_new[:,-2])- jnp.exp(logpdf_joints_init[:,-1]-logpdf_joints_init[:,-2])))) #mean density diff from initial
-    cdiff = index_update(cdiff,i,jnp.mean(jnp.abs(jnp.exp(logcdf_conditionals_new[:,-1])- jnp.exp(logcdf_conditionals_init[:,-1])))) #mean condit cdf diff from initial
+    pdiff = pdiff.at[i].set(jnp.mean(jnp.abs(jnp.exp(logpdf_joints_new[:,-1] - logpdf_joints_new[:,-2])- jnp.exp(logpdf_joints_init[:,-1]-logpdf_joints_init[:,-2])))) #mean density diff from initial
+    cdiff = cdiff.at[i].set(jnp.mean(jnp.abs(jnp.exp(logcdf_conditionals_new[:,-1])- jnp.exp(logcdf_conditionals_init[:,-1])))) #mean condit cdf diff from initial
 
     outputs = logcdf_conditionals_new,logpdf_joints_new,logcdf_conditionals_init,logpdf_joints_init,pdiff,cdiff,rho,n,a_rand 
     return outputs
@@ -141,8 +140,8 @@ def pr_1step_conv_cregression(i,inputs):  #t = n+i
     logcdf_conditionals_new,logpdf_joints_new= mvcr.update_copula(logcdf_conditionals,logpdf_joints,u,v,logalpha_x,rho)
 
     #conditional density
-    pdiff = index_update(pdiff,i,jnp.mean(jnp.abs(jnp.exp(logpdf_joints_new[:,-1])- jnp.exp(logpdf_joints_init[:,-1])))) #mean density diff from initial
-    cdiff = index_update(cdiff,i,jnp.mean(jnp.abs(jnp.exp(logcdf_conditionals_new[:,-1])- jnp.exp(logcdf_conditionals_init[:,-1])))) #mean condit cdf diff from initial
+    pdiff = pdiff.at[i].set(jnp.mean(jnp.abs(jnp.exp(logpdf_joints_new[:,-1])- jnp.exp(logpdf_joints_init[:,-1])))) #mean density diff from initial
+    cdiff = cdiff.at[i].set(jnp.mean(jnp.abs(jnp.exp(logcdf_conditionals_new[:,-1])- jnp.exp(logcdf_conditionals_init[:,-1])))) #mean condit cdf diff from initial
 
     outputs =  logcdf_conditionals_new,logpdf_joints_new,x,x_test,rho,rho_x,n,a_rand,\
                 logcdf_conditionals_init,logpdf_joints_init,pdiff,cdiff

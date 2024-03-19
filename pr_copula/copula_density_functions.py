@@ -4,8 +4,6 @@ from jax import grad, jit, vmap,jacfwd,jacrev,random,remat,value_and_grad
 from jax.scipy.special import ndtri,erfc,logsumexp,betainc
 from jax.scipy.stats import norm,t
 from jax.lax import fori_loop,scan
-from jax.ops import index, index_add, index_update
-from jax.experimental import loops
 from functools import partial
 
 from .utils.bivariate_copula import norm_copula_logdistribution_logdensity
@@ -82,9 +80,9 @@ def update_pn(carry,i):
     u = jnp.exp(logcdf_conditionals_yn)
     v = jnp.exp(logcdf_conditionals_yn[i])
 
-    vn = index_update(vn,i,v) #remember history of vn
+    vn = vn.at[i].set(v) #remember history of vn
  
-    preq_loglik = index_update(preq_loglik,i,logpdf_joints_yn[i,-2:])
+    preq_loglik = preq_loglik.at[i].set(logpdf_joints_yn[i,-2:])
 
     logcdf_conditionals_yn,logpdf_joints_yn= update_copula(logcdf_conditionals_yn,logpdf_joints_yn,u,v,logalpha,rho)
 
