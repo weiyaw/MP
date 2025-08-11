@@ -27,7 +27,7 @@ def update_pn_forward(carry,i):
     x_new = x[ind_new[i]]
 
     #Sample new y based on unif rv
-    y_new = jnp.where((jnp.log(vT[i])<= logpmf_yn[ind_new[i]]),x = 1,y =0)
+    y_new = jnp.where((jnp.log(vT[i])<= logpmf_yn[ind_new[i]]),1,0)
     log_vn = logpmf_yn[ind_new[i]]
     y_samp = y_samp.at[i].set(y_new)
     
